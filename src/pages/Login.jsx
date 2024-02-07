@@ -7,6 +7,8 @@ import * as Yup from "yup"
 import $axios from '../../lib/axios.instance'
 import { useDispatch } from 'react-redux'
 import { openErrorSnackbar, openSuccessSnackbar } from '../store/slices/snackbar.slices'
+import Header from '../Component/Header'
+import Footer from '../Component/Footer'
 
 const Login = () => {
   const dispatch=useDispatch();
@@ -20,7 +22,7 @@ const Login = () => {
 
     onSuccess:(response)=>{
       dispatch(openSuccessSnackbar("Login Successfully"));
-      navigate("/");
+      navigate("/home");
 
       localStorage.setItem("token",response?.data?.token);
       localStorage.setItem("firstName",response?.data?.user?.firstName);
@@ -84,7 +86,7 @@ const Login = () => {
           </Stack>
         </form>
       )}
-
+      
     </Formik>
     </>
   )

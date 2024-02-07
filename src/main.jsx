@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import './App.css'
 import './index.css'
 import {
   createBrowserRouter,
@@ -12,7 +11,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 import store from './store';
 
-const router = createBrowserRouter([...guestRoutes,...mainRoutes]);
+const router = createBrowserRouter([...guestRoutes, ...mainRoutes]);
 
 // Create a client
 const queryClient = new QueryClient()

@@ -1,11 +1,11 @@
 import { Button, FormControl, FormHelperText, InputLabel, LinearProgress, MenuItem, Select, Stack, TextField, Typography } from '@mui/material';
-import { Formik } from 'formik'
-import * as Yup from 'yup'
-import React from 'react'
+import { Formik } from 'formik';
+import React from 'react';
 import { useMutation } from 'react-query';
-import $axios from '../../lib/axios.instance';
-import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import $axios from '../../lib/axios.instance';
 import { openErrorSnackbar, openSuccessSnackbar } from '../store/slices/snackbar.slices';
 
 const Register = () => {

@@ -1,31 +1,31 @@
-import * as React from 'react';
+import { Chip, Stack } from '@mui/material';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import * as React from 'react';
 
-const ProductCard=() =>{
+const ProductCard = ({name,brand,price,description,image}) => {
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image="https://www.himelectronics.com/MediaThumb/medium/Media/Him%20appliances/tv/32hx1sda.jpg"
-        title="green iguana"
-      />
+    <Card sx={{ width: "25%", padding: "1rem", boxShadow: "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;" }}>
+      <img
+        height="250px"
+        width="100%"
+        style={{ objectFit: "cover", padding: "1rem 0" }}
+        src={image} />
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
+        <Stack flexDirection="row" justifyContent="space-between">
+          <Typography gutterBottom variant="h5" component="div">{name}</Typography>
+
+          <Chip label={brand} color="secondary" variant="outlined" />
+        </Stack>
+
+        <Typography variant='h6'>Rs.{price}</Typography>
+        <Typography variant="body1" color="text.secondary">{description}...</Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button size="large" variant='contained' color='success' fullWidth>Explore</Button>
       </CardActions>
     </Card>
   );

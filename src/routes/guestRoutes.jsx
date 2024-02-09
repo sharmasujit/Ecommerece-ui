@@ -14,7 +14,8 @@ export const guestRoutes =[
             {
                 path:"login",
                 element:<Login/>
-            }
+            },
+            
         ]
     }
    

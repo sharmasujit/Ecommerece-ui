@@ -2,13 +2,11 @@ import { Button, FormControl, FormHelperText, LinearProgress, Stack, TextField, 
 import { Formik } from 'formik'
 import React from 'react'
 import { useMutation } from 'react-query'
+import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import * as Yup from "yup"
 import $axios from '../../lib/axios.instance'
-import { useDispatch } from 'react-redux'
 import { openErrorSnackbar, openSuccessSnackbar } from '../store/slices/snackbar.slices'
-import Header from '../Component/Header'
-import Footer from '../Component/Footer'
 
 const Login = () => {
   const dispatch=useDispatch();
@@ -77,8 +75,8 @@ const Login = () => {
           (<FormHelperText error>{errors.password}</FormHelperText>) : null}
           </FormControl>
 
-          <Stack spacing={1}>
-            <Button variant='contained' type='submit' color='success' disabled={isLoading} >Log In</Button>
+          <Stack spacing={1} sx={{justifyContent:"center",alignItems:"center"}}>
+            <Button variant='contained' type='submit' color='success' disabled={isLoading} fullWidth>Log In</Button>
 
             <Link to='/register'>
               <Typography variant='subtitle2' color="info">New here? Register</Typography>

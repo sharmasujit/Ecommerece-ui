@@ -4,7 +4,6 @@ import React from 'react'
 const Footer = () => {
   return (
     <Stack sx={{
-      marginTop:"70vh",
       background:"#FFB0B0",
       width:"100vw",
       minHeight:100,

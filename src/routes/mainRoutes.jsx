@@ -2,6 +2,7 @@ import MainLayout from "../Layout/MainLayout";
 import About from "../pages/About";
 import AddProduct from "../pages/AddProduct";
 import Home from "../pages/Home";
+import ProductDetail from "../pages/ProductDetail";
 import ProductList from "../pages/ProductList";
 
 export const mainRoutes = [
@@ -25,6 +26,10 @@ export const mainRoutes = [
                 path: "product/add",
                 element: <AddProduct />
             },
+            {
+                path:"product/details/:id",
+                element:<ProductDetail/>
+            }
         ]
     }
 

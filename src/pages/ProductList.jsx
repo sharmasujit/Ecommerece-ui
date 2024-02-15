@@ -7,7 +7,7 @@ const ProductList = () => {
     const userRole = localStorage.getItem("role");
 
     return (
-        <Box sx={{mt:"5rem",padding:"2rem"}}>
+        <Box sx={{padding:"2rem"}}>
             {userRole === "seller" ? <SellerProduct /> : <BuyerProduct />}
         </Box>
     )

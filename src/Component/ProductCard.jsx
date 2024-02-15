@@ -15,7 +15,7 @@ const ProductCard = ({name,brand,price,description,image,_id}) => {
         height="250px"
         width="100%"
         style={{ objectFit: "cover", padding: "1rem 0" }}
-        src={image} />
+        src={image ||"https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-illustration-of-a-flat-vector-photo-camera-icon-and-a-no-image-available-icon-vector-png-image_40968614.jpg"} />
       <CardContent>
         <Stack flexDirection="row" justifyContent="space-between">
           <Typography gutterBottom variant="h5" component="div">{name}</Typography>

@@ -42,7 +42,7 @@ const SellerProduct = () => {
                     Add Product
                 </Button>
 
-                <Stack sx={{display:"flex", flexDirection:"row", gap:"1rem",mt:"30px"}}>
+                <Stack sx={{display:"flex", flexDirection:"row",justifyContent:"center",alignItems:"center", gap:"1rem",mt:"30px"}}>
                 {productList.map((item) => {
                     return (<ProductCard key={item._id} {...item} />)
                 })}

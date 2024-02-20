@@ -7,15 +7,20 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ProductCard = ({name,brand,price,description,image,_id}) => {
-  const navigate=useNavigate();
+const ProductCard = ({ name, brand, price, description, image, _id }) => {
+  const navigate = useNavigate();
   return (
     <Card sx={{ width: "25%", padding: "1rem", boxShadow: "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;" }}>
       <img
-        height="250px"
-        width="100%"
-        style={{ objectFit: "cover", padding: "1rem 0" }}
-        src={image ||"https://png.pngtree.com/png-vector/20221125/ourmid/pngtree-illustration-of-a-flat-vector-photo-camera-icon-and-a-no-image-available-icon-vector-png-image_40968614.jpg"} />
+        onClick={() => { navigate(`/product/details/${_id}`) }}
+        style={{ 
+          objectFit: "contain", 
+          padding: "1rem 0" , 
+          height:"300px",
+          width:"100%",
+          cursor:"pointer"
+        }}
+        src={image ||"https://www.freeiconspng.com/thumbs/no-image-icon/no-image-icon-15.png"} />
       <CardContent>
         <Stack flexDirection="row" justifyContent="space-between">
           <Typography gutterBottom variant="h5" component="div">{name}</Typography>
@@ -27,10 +32,9 @@ const ProductCard = ({name,brand,price,description,image,_id}) => {
         <Typography variant="body1" color="text.secondary">{description}...</Typography>
       </CardContent>
       <CardActions>
-        <Button size="large" variant='contained' color='success' fullWidth onClick={()=>{navigate(`/product/details/${_id}`)}}>Explore</Button>
+        <Button size="large" variant='contained' color='success' fullWidth onClick={() => { navigate(`/product/details/${_id}`) }}>Explore</Button>
       </CardActions>
     </Card>
   );
 }
-
 export default ProductCard;

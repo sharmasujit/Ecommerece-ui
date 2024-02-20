@@ -1,88 +1,97 @@
-import { Box, Button, FormControl, FormHelperText, InputAdornment, InputLabel, LinearProgress, MenuItem, OutlinedInput, Select, TextField, Typography } from '@mui/material';
-import { Formik } from 'formik';
-import React from 'react';
-import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
-import $axios from '../../lib/axios.instance';
-import { openErrorSnackbar, openSuccessSnackbar } from '../store/slices/snackbar.slices';
-import { useDispatch } from 'react-redux';
+import { Button, FormControl, FormHelperText, InputAdornment, InputLabel, MenuItem, OutlinedInput, Select, TextField, Typography } from '@mui/material'
+import { Formik } from 'formik'
+import React from 'react'
+import { useMutation, useQuery } from 'react-query'
+import * as Yup from "yup"
+import $axios from '../../lib/axios.instance'
+import { useNavigate, useParams } from 'react-router-dom'
+import Loader from '../Component/Loader'
+import { useDispatch } from 'react-redux'
+import { openErrorSnackbar, openSuccessSnackbar } from '../store/slices/snackbar.slices'
 
-const AddProduct = () => {
-    const categoriesList = ["electronics", "clothing", "grocery", "cosmetics", "toys", "furniture", "sports", "stationery",]
-    const navigate=useNavigate();
+const EditProduct = () => {
+    const categoriesList = ["electronics", "clothing", "grocery", "cosmetics", "toys", "furniture", "sports", "stationery",];
 
-    const dispatch=useDispatch()
+    const { id } = useParams();
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    const {isLoading,mutate:addProduct}=useMutation({
-        mutationKey:["addproduct"],
-        mutationFn:async(values)=>{
-            return await $axios.post("/product/add",values)
-        },
-        onSuccess:(response)=>{
-           dispatch(openSuccessSnackbar(response?.data?.message));
-           navigate("/product/list");
-        },
-        onError:(error)=>{
-            dispatch(openErrorSnackbar(error?.response?.data?.message))
+    const { isLoading, data } = useQuery({
+        queryKey: ["product-detail"],
+        queryFn: async () => {
+            return await $axios.get(`/product/details/${id}`);
         }
     })
-    
+
+    const productData = data?.data?.product;
+
+    const { isLoading: editProductLoading, mutate: editProduct } = useMutation({
+        mutationKey: ["edit-product"],
+        mutationFn: async (values) => {
+            return await $axios.put(`/product/edit/${id}`,values);
+        },
+
+        onSuccess: (response) => {
+            dispatch(openSuccessSnackbar(response?.data?.message));
+            navigate(`/product/details/${id}`);
+        },
+
+        onError: (error) => {
+            dispatch(openErrorSnackbar(error?.response?.data?.error))
+        }
+    })
+
+    if (isLoading) {
+        return <Loader />
+    }
     return (
-        <Box sx={{display:"flex", alignItems:"center",justifyContent:"center", marginBottom:"50px"}}>
-            {isLoading && <LinearProgress color='secondary'/>}
-            <Formik
-                initialValues={{
-                    name: "",
-                    brand: "",
-                    price: 0,
-                    quantity: 1,
-                    category: "",
-                    image: null,
-                    description: ""
-                }}
-                validationSchema={
-                    Yup.object({
-                        name: Yup.string()
-                            .max(30, "Name must be at max 30 characters.")
-                            .required("Name is required.").trim(),
+        <>
+            <Formik initialValues={{
+                name: productData?.name || "",
+                brand: productData?.brand || "",
+                price: productData?.price || 0,
+                quantity: productData?.quantity || 1,
+                category: productData?.category || "",
+                image: productData?.image || null,
+                description: productData?.description || ""
+            }}
+                validationSchema={Yup.object({
+                    name: Yup.string()
+                        .max(30, "Name must be at max 30 characters.").required("Name is required.").trim(),
 
-                        brand: Yup.string()
-                            .max(30, "Brand must be at max 30 characters.")
-                            .required("Brand is required.").trim(),
+                    brand: Yup.string()
+                        .max(30, "Brand must be at max 30 characters.").required("Brand is required.").trim(),
 
-                        price: Yup.number().min(0).required("Price is required."),
+                    price: Yup.number().min(0).required("Price is required."),
 
-                        quantity: Yup.number().min(1).required("Quantity is required."),
+                    quantity: Yup.number().min(1).required("Quantity is required."),
 
-                        category: Yup.string()
-                            .oneOf(categoriesList),
+                    category: Yup.string().oneOf(categoriesList),
 
-                        image: Yup.string().nullable(),
+                    image: Yup.string().nullable(),
 
-                        description: Yup.string()
-                            .required("Description is required.")
-                            .trim().max(1000, "Description must be at max 1000 characters."),
-                    })
-                }
-
+                    description: Yup.string()
+                        .required("Description is required.")
+                        .trim().max(1000, "Description must be at max 1000 characters."),
+                })}
                 onSubmit={(values) => {
-                    addProduct(values);
+                    console.log(values);
+                    editProduct(values);
                 }}
             >
                 {({ handleSubmit, touched, errors, getFieldProps }) => (
                     <form onSubmit={handleSubmit}
                         style={{
-                            marginTop:"5rem",
+                            marginTop: "5rem",
                             display: "flex",
                             flexDirection: "column",
                             padding: "2rem",
                             gap: "2rem",
-                            width:"500px",
+                            width: "500px",
                             boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
                         }}
                     >
-                        <Typography variant='h4'>Add Product</Typography>
+                        <Typography variant='h4'sx={{textAlign:"center"}}>Edit Product</Typography>
                         <FormControl>
                             <TextField
                                 color='success'
@@ -122,7 +131,6 @@ const AddProduct = () => {
                                 color='success'
                                 label="Quantity" variant='outlined'
                                 type='number'
-                                
                                 {...getFieldProps("quantity")}
                             />
                             {touched.quantity && errors.quantity ?
@@ -147,26 +155,26 @@ const AddProduct = () => {
 
                         <FormControl>
                             <TextField
-                            color='success'
-                            label="Description"
-                            variant='outlined'
-                            multiline
-                            rows={8}
-                            {...getFieldProps("description")}
+                                color='success'
+                                label="Description"
+                                variant='outlined'
+                                multiline
+                                rows={8}
+                                {...getFieldProps("description")}
                             />
                             {touched.description && errors.description ?
-                            (<FormHelperText error>{errors.description}</FormHelperText>):null}
+                                (<FormHelperText error>{errors.description}</FormHelperText>) : null}
                         </FormControl>
-                        
-                        <Button type='submit' variant='contained' color='success'>Add Product</Button>
 
+                        <Button type='submit' variant='contained' color='success'>
+                            Edit Product
+                        </Button>
                     </form>
-                )
-                }
+                )}
 
             </Formik>
-        </Box>
+        </>
     )
 }
 
-export default AddProduct;
+export default EditProduct

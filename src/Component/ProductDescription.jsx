@@ -49,6 +49,7 @@ const ProductDescription = ({ name, brand, description, price, category, quantit
                     variant="outlined"
                     color="warning"
                     size="medium"
+                    sx={{textTransform:"capitalize"}}
                 />
             </Grid>
 
@@ -60,6 +61,7 @@ const ProductDescription = ({ name, brand, description, price, category, quantit
                         color='success'
                         size='medium'
                         startIcon={<EditIcon />}
+                        onClick={()=>{navigate(`/product/edit/${_id}`)}}
                     >
                         <Typography>Edit Product</Typography>
                     </Button>

@@ -5,6 +5,7 @@ import { useQuery } from 'react-query'
 import $axios from '../../lib/axios.instance'
 import Loader from '../Component/Loader'
 import ProductCard from '../Component/ProductCard'
+import NoProductFound from '../Component/NoProductFound'
 
 const BuyerProduct = () => {
 
@@ -27,6 +28,10 @@ const BuyerProduct = () => {
 
   if (isLoading) {
     return <Loader />
+  }
+
+  if (productList.length < 1) {
+    return <NoProductFound />;
   }
   return (
     <>

@@ -3,6 +3,7 @@ import { Button, Chip, Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import DeleteDialog from './DeleteDialog';
 import { useNavigate } from 'react-router-dom';
+import ItemCounter from './ItemCounter';
 
 const ProductDescription = ({ name, brand, description, price, category, quantity, _id }) => {
     const userRole = localStorage.getItem("role");
@@ -52,6 +53,8 @@ const ProductDescription = ({ name, brand, description, price, category, quantit
                     sx={{textTransform:"capitalize"}}
                 />
             </Grid>
+
+            {userRole==="buyer" && <ItemCounter availableQuantity={quantity}/>}
 
             <Grid item mt="1rem">
                 {userRole==="seller" &&(

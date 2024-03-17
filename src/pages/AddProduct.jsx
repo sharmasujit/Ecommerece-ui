@@ -1,36 +1,38 @@
-import { Box, Button, FormControl, FormHelperText, InputAdornment, InputLabel, LinearProgress, MenuItem, OutlinedInput, Select, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, FormHelperText, InputAdornment, InputLabel, LinearProgress, MenuItem, OutlinedInput, Select, Stack, TextField, Typography } from '@mui/material';
 import { Formik } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import $axios from '../../lib/axios.instance';
 import { openErrorSnackbar, openSuccessSnackbar } from '../store/slices/snackbar.slices';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 
 const AddProduct = () => {
-    const categoriesList = ["electronics", "clothing", "grocery", "cosmetics", "toys", "furniture", "sports", "stationery",]
-    const navigate=useNavigate();
+    const categoriesList = ["electronics", "clothing", "grocery", "cosmetics", "toys", "furniture", "sports", "stationery",];
+    const [productImage, setProductImage] = useState(null);
+    const [localUrl, setLocalUrl] = useState(null);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const dispatch=useDispatch()
-
-    const {isLoading,mutate:addProduct}=useMutation({
-        mutationKey:["addproduct"],
-        mutationFn:async(values)=>{
-            return await $axios.post("/product/add",values)
+    const { isLoading, mutate: addProduct } = useMutation({
+        mutationKey: ["addproduct"],
+        mutationFn: async (values) => {
+            return await $axios.post("/product/add", values)
         },
-        onSuccess:(response)=>{
-           dispatch(openSuccessSnackbar(response?.data?.message));
-           navigate("/product/list");
+        onSuccess: (response) => {
+            dispatch(openSuccessSnackbar(response?.data?.message));
+            navigate("/product/list");
         },
-        onError:(error)=>{
+        onError: (error) => {
             dispatch(openErrorSnackbar(error?.response?.data?.message))
         }
     })
-    
+
     return (
-        <Box sx={{display:"flex", alignItems:"center",justifyContent:"center", marginBottom:"50px"}}>
-            {isLoading && <LinearProgress color='secondary'/>}
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "50px" }}>
+            {isLoading && <LinearProgress color='secondary' />}
             <Formik
                 initialValues={{
                     name: "",
@@ -66,23 +68,52 @@ const AddProduct = () => {
                     })
                 }
 
-                onSubmit={(values) => {
+                onSubmit={async(values) => {
+                    // if (productImage) {
+                    //     const cloudName = "dzmqrmwps";
+                    //     //create form data object
+                    //     const data = new FormData()
+                    //     data.append("file", productImage);
+                    //     data.append("upload_preset", "nep_mart");
+                    //     data.append("cloud_name", cloudName);
+                    // }
+                    // try {
+                    //    const response= await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/upload`,data);
+                    //    console.log(response);
+                       
+                    // } catch (error) {
+                    //     dispatch(openErrorSnackbar(error.message)); 
+                    // }
+
                     addProduct(values);
                 }}
             >
                 {({ handleSubmit, touched, errors, getFieldProps }) => (
                     <form onSubmit={handleSubmit}
                         style={{
-                            marginTop:"5rem",
+                            marginTop: "5rem",
                             display: "flex",
                             flexDirection: "column",
                             padding: "2rem",
                             gap: "2rem",
-                            width:"500px",
+                            width: "500px",
                             boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
                         }}
                     >
-                        <Typography variant='h4'>Add Product</Typography>
+                        <Typography variant='h4' sx={{ textAlign: "center" }}>Add Product</Typography>
+                        <Stack sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            {productImage && <img src={localUrl} alt='' />}
+                        </Stack>
+
+                        {/* <FormControl>
+                            <input type='file'
+                                onChange={(event) => {
+                                    const file = event?.target?.files[0];
+                                    setProductImage(file);
+                                    setLocalUrl(URL.createObjectURL(file));
+                                }}
+                            />
+                        </FormControl> */}
                         <FormControl>
                             <TextField
                                 color='success'
@@ -122,7 +153,7 @@ const AddProduct = () => {
                                 color='success'
                                 label="Quantity" variant='outlined'
                                 type='number'
-                                
+
                                 {...getFieldProps("quantity")}
                             />
                             {touched.quantity && errors.quantity ?
@@ -147,17 +178,17 @@ const AddProduct = () => {
 
                         <FormControl>
                             <TextField
-                            color='success'
-                            label="Description"
-                            variant='outlined'
-                            multiline
-                            rows={8}
-                            {...getFieldProps("description")}
+                                color='success'
+                                label="Description"
+                                variant='outlined'
+                                multiline
+                                rows={8}
+                                {...getFieldProps("description")}
                             />
                             {touched.description && errors.description ?
-                            (<FormHelperText error>{errors.description}</FormHelperText>):null}
+                                (<FormHelperText error>{errors.description}</FormHelperText>) : null}
                         </FormControl>
-                        
+
                         <Button type='submit' variant='contained' color='success'>Add Product</Button>
 
                     </form>

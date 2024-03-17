@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 const ProductCard = ({ name, brand, price, description, image, _id }) => {
   const navigate = useNavigate();
   return (
-    <Card sx={{ width: "25%", padding: "1rem", boxShadow: "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;" }}>
+    <Card sx={{width: "25%", padding: "1rem", boxShadow: "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;" }}>
       <img
         onClick={() => { navigate(`/product/details/${_id}`) }}
         style={{ 

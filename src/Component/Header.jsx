@@ -13,8 +13,13 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import LogoutDialog from './LogoutDialog';
+import ShoppingCartTwoToneIcon from "@mui/icons-material/ShoppingCartTwoTone";
+import { Badge } from '@mui/material';
+import { useQuery } from 'react-query';
+import $axios from '../../lib/axios.instance';
+import { useDispatch } from 'react-redux';
 
 const drawerWidth = 240;
 const navItems = [
@@ -36,13 +41,26 @@ const navItems = [
 ];
 
 const Header=(props)=> {
-    const navigate=useNavigate()
+  const dispatch=useDispatch();
+  const userRole=localStorage.getItem("role")
+  const navigate=useNavigate()
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  // get cart count
+  const { isLoading, data } = useQuery({
+    queryKey: ["cart-item-count"],
+    queryFn: async () => {
+      return await $axios.get("/cart/item/count");
+    },
+    enabled: userRole === "buyer",
+  });
+
+  const cartItemCount = data?.data?.cartItemCount;
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
@@ -52,7 +70,7 @@ const Header=(props)=> {
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item.id} disablePadding>
+          <ListItem key={item.id} disablePadding onClick={()=>{navigate(item.path)}}>
             <ListItemButton sx={{ textAlign: 'center' }}>
               <ListItemText primary={item.name} />
             </ListItemButton>
@@ -87,13 +105,39 @@ const Header=(props)=> {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item.id} sx={{ color: '#fff' }} onClick={()=>{navigate(item.path)}}>
-                {item.name}
-              </Button>
+               <NavLink
+               onClick={() => {
+                 dispatch(clearFilter());
+               }}
+               key={item.id}
+               to={item.path}
+               style={{ color: "white", marginRight: "1rem" }}
+               className={({ isActive, isPending }) =>
+                 isPending ? "pending" : isActive ? "active" : ""
+               }
+             >
+               {item.name}
+             </NavLink>
+              
             ))}
           </Box>
-          <Box sx={{display:"flex",flexDirection:"row",justifyContent:"center",alignItems:"center",gap:"1rem"}}>
-            <p>Cart</p>
+          <Box sx={{display:"flex",flexDirection:"row",justifyContent:"center",alignItems:"center",gap:"2rem"}}>
+          <Typography>Hi {localStorage.getItem("firstName")}</Typography>
+
+          {userRole === "buyer" && (
+              <Badge
+                badgeContent={cartItemCount || 0}
+                color="primary"
+                sx={{
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate("/cart");
+                }}
+              >
+                <ShoppingCartTwoToneIcon sx={{ color: "#fff" }} />
+              </Badge>
+            )}
             <LogoutDialog/>
           </Box>
         </Toolbar>

@@ -14,7 +14,7 @@ const BuyerProduct = () => {
   const [page, setPage] = useState(1)
 
   const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["buyer-product-list", page, searchText,"cart-item-count"],
+    queryKey: ["buyer-product-list", page, searchText],
     queryFn: async () => {
       return await $axios.post("/product/buyer/list", {
         page,

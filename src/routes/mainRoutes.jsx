@@ -4,6 +4,7 @@ import AddProduct from "../pages/AddProduct";
 import CartPage from "../pages/CartPage";
 import EditProduct from "../pages/EditProduct";
 import Home from "../pages/Home";
+import KhaltiSuccess from "../pages/KhaltiSuccess";
 import ProductDetail from "../pages/ProductDetail";
 import ProductList from "../pages/ProductList";
 
@@ -39,7 +40,11 @@ export const mainRoutes = [
             {
                 path:"/cart",
                 element:<CartPage/>
-            }
+            },
+            {
+                path: "/payment/khalti/success",
+                element: <KhaltiSuccess />,
+            },
         ]
     }
 

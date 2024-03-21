@@ -1,7 +1,32 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import React from "react";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import $axios from "../../lib/axios.instance";
+import Loader from "./Loader";
 
-const CartCheckout = ({ subTotal, discount, grandTotal }) => {
+const CartCheckout = ({ subTotal, discount, grandTotal, orderProductList }) => {
+  const navigate = useNavigate();
+  const { isLoading, mutate } = useMutation({
+    mutationKey: ["initiate-payment"],
+    mutationFn: async () => {
+      return await $axios.post("/payment/khalti/start", {
+        amount: +grandTotal,
+        productList: orderProductList,
+      });
+    },
+    onSuccess: (res) => {
+      // navigate(res?.data?.paymentInfo?.payment_url, { replace: true });
+      window.location.replace(res?.data?.paymentInfo?.payment_url);
+    },
+    onError: (error) => {
+      console.log(error?.response?.data?.message);
+    },
+  });
+
+  if (isLoading) {
+    return <Loader/>;
+  }
   return (
     <Box
       sx={{
@@ -45,8 +70,15 @@ const CartCheckout = ({ subTotal, discount, grandTotal }) => {
         <Typography>Grand total</Typography>
         <Typography>Rs.{grandTotal}</Typography>
       </Stack>
-      <Button variant="contained" color="success" fullWidth>
-        <Typography>proceed to checkout</Typography>
+      <Button
+        variant="contained"
+        color="success"
+        fullWidth
+        onClick={() => {
+          mutate();
+        }}
+      >
+        pay with khalti
       </Button>
     </Box>
   );

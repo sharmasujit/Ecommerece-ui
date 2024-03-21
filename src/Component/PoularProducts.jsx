@@ -7,13 +7,13 @@ import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ProductCard = ({ name, brand, price, description, image, _id }) => {
+const PopularProducts = ({ name, brand, price, description, image, _id }) => {
   const navigate = useNavigate();
   return (
-     <Card sx={{width:"25%", flexDirection:"column", padding: "1rem", boxShadow: "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;" }}>
+     <Card sx={{flexDirection:"column", padding: "1rem", boxShadow: "rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;" }}>
       
       <img
-        onClick={() => { navigate(`/product/details/${_id}`) }}
+        //onClick={() => { navigate(`/product/details/${_id}`) }}
         style={{ 
           objectFit: "contain", 
           padding: "1rem 0" , 
@@ -30,14 +30,14 @@ const ProductCard = ({ name, brand, price, description, image, _id }) => {
         </Stack>
 
         <Typography variant='h6'>Rs.{price}</Typography>
-        <Typography variant="body1" color="text.secondary">{description}...</Typography>
+        {/* <Typography variant="body1" color="text.secondary">{description}...</Typography> */}
       </CardContent>
-      <CardActions>
+      {/* <CardActions>
         <Button size="large" variant='contained' color='success' fullWidth onClick={() => { navigate(`/product/details/${_id}`) }}>Explore</Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
    
   );
 }
-export default ProductCard;
+export default PopularProducts;
 
